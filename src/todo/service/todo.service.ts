@@ -6,11 +6,11 @@ import { Todo } from '@prisma/client';
 export class TodoService {
   constructor(private prismaService: PrismaService) {}
 
-  async fetchAllTodos(): Promise<Todo[]> {
+  async getAllTodos(): Promise<Todo[]> {
     return this.prismaService.todo.findMany();
   }
 
-  async fetchTodoItem(id: number): Promise<Todo | null> {
+  async getTodoItem(id: number): Promise<Todo | null> {
     return this.prismaService.todo.findUnique({
       where: { id: Number(id) },
     });
@@ -22,5 +22,21 @@ export class TodoService {
 
   async addTodoItem(data: Todo): Promise<Todo> {
     return this.prismaService.todo.create({ data });
+  }
+
+  async updateTodoItem(
+    id: number,
+    title: string,
+    content: string,
+    is_done: boolean,
+  ): Promise<Todo> {
+    return this.prismaService.todo.update({
+      where: { id: Number(id) },
+      data: {
+        title,
+        content,
+        is_done,
+      },
+    });
   }
 }
